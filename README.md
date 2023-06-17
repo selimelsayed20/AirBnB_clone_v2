@@ -155,8 +155,9 @@ No known bugs at this time.
 
 ## Authors
 Selim Elsayed - [Github](https://github.com/selimelsayed20) 
+
 Ahmed Shams - [Github](https://github.com/AhmedShams40)
 
-Second part of Airbnb: Selim
+
 ## License
 Public Domain. No copy write protection. 
