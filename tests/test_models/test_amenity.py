@@ -1,8 +1,6 @@
 #!/usr/bin/python3
-"""
-Contains the TestAmenityDocs classes
-"""
-
+""" """
+from tests.test_models.test_base_model import test_basemodel
 from datetime import datetime
 import inspect
 import models
@@ -10,11 +8,29 @@ from models import amenity
 from models.base_model import BaseModel
 import pep8
 import unittest
+from os import getenv
 Amenity = amenity.Amenity
+storage_t = getenv("HBNB_TYPE_STORAGE")
+
+
+class test_Amenity(test_basemodel):
+    """ """
+
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "Amenity"
+        self.value = Amenity
+
+    def test_name2(self):
+        """ """
+        new = self.value(name="wifi")
+        self.assertEqual(type(new.name), str)
 
 
 class TestAmenityDocs(unittest.TestCase):
     """Tests to check the documentation and style of Amenity class"""
+
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -59,6 +75,7 @@ class TestAmenityDocs(unittest.TestCase):
 
 class TestAmenity(unittest.TestCase):
     """Test the Amenity class"""
+
     def test_is_subclass(self):
         """Test that Amenity is a subclass of BaseModel"""
         amenity = Amenity()
@@ -71,7 +88,7 @@ class TestAmenity(unittest.TestCase):
         """Test that Amenity has attribute name, and it's as an empty string"""
         amenity = Amenity()
         self.assertTrue(hasattr(amenity, "name"))
-        if models.storage_t == 'db':
+        if storage_t == 'db':
             self.assertEqual(amenity.name, None)
         else:
             self.assertEqual(amenity.name, "")

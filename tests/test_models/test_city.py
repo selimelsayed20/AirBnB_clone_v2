@@ -1,16 +1,33 @@
 #!/usr/bin/python3
-"""
-Contains the TestCityDocs classes
-"""
-
-from datetime import datetime
-import inspect
-import models
-from models import city
-from models.base_model import BaseModel
-import pep8
+""" """
+from tests.test_models.test_base_model import test_basemodel
+from models.city import City
+from os import getenv
 import unittest
-City = city.City
+import inspect
+import pep8
+from models.base_model import BaseModel
+storage_t = getenv("HBNB_TYPE_STORAGE")
+
+
+class test_City(test_basemodel):
+    """ """
+
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "City"
+        self.value = City
+
+    def test_state_id(self):
+        """ """
+        new = self.value(state_id="df34", name="foo")
+        self.assertEqual(type(new.state_id), str)
+
+    def test_name(self):
+        """ """
+        new = self.value(state_id="df34", name="foo")
+        self.assertEqual(type(new.name), str)
 
 
 class TestCityDocs(unittest.TestCase):
@@ -36,9 +53,9 @@ class TestCityDocs(unittest.TestCase):
 
     def test_city_module_docstring(self):
         """Test for the city.py module docstring"""
-        self.assertIsNot(city.__doc__, None,
+        self.assertIsNot(City.__doc__, None,
                          "city.py needs a docstring")
-        self.assertTrue(len(city.__doc__) >= 1,
+        self.assertTrue(len(City.__doc__) >= 1,
                         "city.py needs a docstring")
 
     def test_city_class_docstring(self):
@@ -59,6 +76,7 @@ class TestCityDocs(unittest.TestCase):
 
 class TestCity(unittest.TestCase):
     """Test the City class"""
+
     def test_is_subclass(self):
         """Test that City is a subclass of BaseModel"""
         city = City()
@@ -71,7 +89,7 @@ class TestCity(unittest.TestCase):
         """Test that City has attribute name, and it's an empty string"""
         city = City()
         self.assertTrue(hasattr(city, "name"))
-        if models.storage_t == 'db':
+        if storage_t == 'db':
             self.assertEqual(city.name, None)
         else:
             self.assertEqual(city.name, "")
@@ -80,7 +98,7 @@ class TestCity(unittest.TestCase):
         """Test that City has attribute state_id, and it's an empty string"""
         city = City()
         self.assertTrue(hasattr(city, "state_id"))
-        if models.storage_t == 'db':
+        if storage_t == 'db':
             self.assertEqual(city.state_id, None)
         else:
             self.assertEqual(city.state_id, "")

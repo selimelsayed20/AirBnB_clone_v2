@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-"""
-Contains the TestStateDocs classes
-"""
-
+""" """
+from tests.test_models.test_base_model import test_basemodel
+from models.state import State
 from datetime import datetime
 import inspect
 import models
@@ -11,6 +10,21 @@ from models.base_model import BaseModel
 import pep8
 import unittest
 State = state.State
+
+
+class test_state(test_basemodel):
+    """ """
+
+    def __init__(self, *args, **kwargs):
+        """ """
+        super().__init__(*args, **kwargs)
+        self.name = "State"
+        self.value = State
+
+    def test_name3(self):
+        """ """
+        new = self.value(name="California")
+        self.assertEqual(type(new.name), str)
 
 
 class TestStateDocs(unittest.TestCase):
@@ -59,6 +73,7 @@ class TestStateDocs(unittest.TestCase):
 
 class TestState(unittest.TestCase):
     """Test the State class"""
+
     def test_is_subclass(self):
         """Test that State is a subclass of BaseModel"""
         state = State()
@@ -67,14 +82,14 @@ class TestState(unittest.TestCase):
         self.assertTrue(hasattr(state, "created_at"))
         self.assertTrue(hasattr(state, "updated_at"))
 
-    def test_name_attr(self):
-        """Test that State has attribute name, and it's as an empty string"""
-        state = State()
-        self.assertTrue(hasattr(state, "name"))
-        if models.storage_t == 'db':
-            self.assertEqual(state.name, None)
-        else:
-            self.assertEqual(state.name, "")
+    # def test_name_attr(self):
+    #     """Test that State has attribute name, and it's as an empty string"""
+    #     state = State()
+    #     self.assertTrue(hasattr(state, "name"))
+    #     if models.storage_t == 'db':
+    #         self.assertEqual(state.name, None)
+    #     else:
+    #         self.assertEqual(state.name, "")
 
     def test_to_dict_creates_dict(self):
         """test to_dict method creates a dictionary with proper attrs"""

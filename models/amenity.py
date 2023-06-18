@@ -1,21 +1,21 @@
-#!/usr/bin/python
-""" holds class Amenity"""
-import models
+#!/usr/bin/python3
+""" instances amenities """
 from models.base_model import BaseModel, Base
-from os import getenv
-import sqlalchemy
-from sqlalchemy import Column, String
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
+from models.place import Place
+from os import getenv
+
+STORAGE = getenv("HBNB_TYPE_STORAGE")
 
 
 class Amenity(BaseModel, Base):
-    """Representation of Amenity """
-    if models.storage_t == 'db':
-        __tablename__ = 'amenities'
+    """Permit to add the amenities for places"""
+    __tablename__ = "amenities"
+    if STORAGE == "db":
         name = Column(String(128), nullable=False)
+        place_amenities = relationship(
+            'Place', secondary=Place.place_amenity)
+
     else:
         name = ""
-
-    def __init__(self, *args, **kwargs):
-        """initializes Amenity"""
-        super().__init__(*args, **kwargs)
