@@ -1,71 +1,74 @@
 #!/usr/bin/python3
-"""Write a script that starts a Flask web application
-and would be listening on 0.0.0.0, port 5000"""
-from flask import Flask, request
+"""script that starts a Flask web application"""
 
+
+# import Flask class from flask module
+from flask import Flask
+
+# create an instance called app of the class by passong the __name__ variable
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
-@app.route("/", strict_slashes=False)
-def hello():
-    """main or home route
-
-    Rules that end with a slash are “branches”, others
-    are “leaves”. If << strict_slashes >> is enabled
-    (the default), visiting a branch URL without a
-    trailing slash will redirect to the URL with a slash appended.
+@app.route('/')
+def index():
+    """display "Hello HBNB!"
 
     Returns:
-            [string]: [display “Hello HBNB!”]
+        str: text on the index page
     """
-    return "Hello HBNB!"
+    return 'Hello HBNB!'
 
 
-@app.route("/hbnb", strict_slashes=False)
-def hbnb():
-    """
-    /hbnb folder
+@app.route('/hbnb')
+def hbnb_route():
+    """display "HBNB"
 
     Returns:
-            [string]: [display “HBNB”]
+        str: text on the page
     """
-    return "HBNB"
+    return 'HBNB'
 
 
-@app.route("/c/<text>", strict_slashes=False)
-def c(text):
-    """
-    /c folder
+@app.route('/c/<text>')
+def c_route(text):
+    """display "C", followed by the value of the text variable
+
+    Args:
+        text (str): text to be served on the page
 
     Returns:
-            [string]: [display “C” followed by the value of the text variable]
+        str: text on the page
     """
-    return "C {}".format(text).replace("_", " ")
+    return 'C {}'.format(text.replace('_', ' '))
 
 
-@app.route("/python/<text>", strict_slashes=False)
-@app.route("/python", strict_slashes=False)
-def python(text="is cool"):
-    """
-    /python folder
+@app.route('/python', defaults={'text': 'is cool'})
+@app.route('/python/<text>')
+def python_route(text):
+    """display "Python", followed by the value of the text variable
+
+    Args:
+        text (str): text to be served on the page
 
     Returns:
-            [string]: [display “Python” followed by the
-            value of the text variable]
+        str: text on the page
     """
-    return "Python {}".format(text).replace("_", " ")
+    return 'Python {}'.format(text.replace('_', ' '))
 
 
-@app.route("/number/<int:n>", strict_slashes=False)
-def number(n):
-    """
-    /number folder
+@app.route('/number/<int:n>')
+def number_route(n):
+    """display "n is a number" only if n is an integer
+
+    Args:
+        n (integer): number to be displayed on page
 
     Returns:
-            [int]: [display “n is a number” only if n is an integer]
+        str: text on the page
     """
-    return "%d is a number" % n
+    return '{} is a number'.format(n)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)

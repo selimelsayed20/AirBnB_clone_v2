@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-script (based on the file 2-do_deploy_web_static.py) that creates and
-distributes an archive to web servers
+script (based on the file 3-do_deploy_web_static.py) that deletes
+out-of-date archives
 """
 import os.path
 from fabric.api import *
@@ -123,3 +123,40 @@ def do_deploy(archive_path):
         success = False
         print("Could not deploy")
     return success
+
+
+def do_clean(number=0):
+    """deletes out-of-date archives
+
+    If number is 0 or 1, keep only the most recent version of your archive.
+    if number is 2, keep the most recent, and second most recent versions of
+    your archive.
+    Delete all unnecessary archives (all archives minus the number to keep
+    in the versions folder.
+    Delete all unnecessary archives (all archives minus the number to keep)
+    in the /data/web_static/releases folder of both of your web servers.
+
+    Args:
+        number (int, optional): number of the archives, including the most
+        recent, to keep. Defaults to 0.
+    """
+    archives = os.listdir('versions/')
+    archives.sort(reverse=True)
+    start = int(number)
+    path = '/data/web_static/releases'
+    if not start:
+        start += 1
+    if start < len(archives):
+        archives = archives[start:]
+    else:
+        archives = []
+    for archive in archives:
+        os.unlink('versions/{}'.format(archive))
+    cmd_parts = [
+        "rm -rf $(",
+        "find {}/ -maxdepth 1 -type d -iregex",
+        " '{}/web_static_.*'",
+        " | sort -r | tr '\\n' ' ' | cut -d ' ' -f{}-)"
+        .format(path, path, start + 1)
+    ]
+    run(''.join(cmd_parts))

@@ -1,21 +1,22 @@
 #!/usr/bin/python3
-""" instances amenities """
+""" State Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
-from sqlalchemy.orm import relationship
-from models.place import Place
-from os import getenv
-
-STORAGE = getenv("HBNB_TYPE_STORAGE")
+# SQLAlchemy modules
+from sqlalchemy import Column, String, ForeignKey, Integer, Float
 
 
 class Amenity(BaseModel, Base):
-    """Permit to add the amenities for places"""
-    __tablename__ = "amenities"
-    if STORAGE == "db":
-        name = Column(String(128), nullable=False)
-        place_amenities = relationship(
-            'Place', secondary=Place.place_amenity)
+    """Defines a class Amenity
 
-    else:
-        name = ""
+    Attributes:
+        __tablename__ (str): amenities
+
+        name (str): name of amenity.
+    """
+
+    __tablename__ = 'amenities'
+    name = Column(String(128), nullable=False)
+
+    def __init__(self, *args, **kwargs):
+        """initializes state"""
+        super().__init__(*args, **kwargs)

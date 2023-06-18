@@ -1,33 +1,35 @@
 #!/usr/bin/python3
-"""Write a script that starts a Flask web application
-and would be listening on 0.0.0.0, port 5000"""
-from flask import Flask, request, render_template
+"""script that starts a Flask web application"""
+
+
+# import Flask class from flask module
+# import render_template for rendering templates to browser
+# fetch data from storage engine
+from flask import Flask, render_template
+
 from models import storage
-from models.state import State
-from models.amenity import Amenity
 
-
+# create an instance called app of the class by passong the __name__ variable
 app = Flask(__name__)
-
-
-@app.route("/hbnb_filters", strict_slashes=False)
-def hbnb_filter():
-    """/states folder with an id
-
-    Returns:
-        [HTML content: [display a HTML page: (inside the tag BODY)]
-    """
-    states = storage.all(State)
-    amenities = storage.all(Amenity)
-    return render_template(
-        "10-hbnb_filters.html", states=states, amenities=amenities)
+app.url_map.strict_slashes = False
 
 
 @app.teardown_appcontext
-def remove_session(exception):
-    """fter each request you must remove the current SQLAlchemy Session"""
-    storage.close()
+def teardown_db(exception=None):
+    """removes the current SQLAlchemy Session
+    """
+    if storage is not None:
+        storage.close()
+
+
+@app.route('/hbnb_filters')
+def hbnb_filters(id=None):
+    """displays a HTML page: inside the tag BODY"""
+    states = storage.all("State").values()
+    amenities = storage.all("Amenity").values()
+    return render_template('10-hbnb_filters.html',
+                           states=states, amenities=amenities)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
